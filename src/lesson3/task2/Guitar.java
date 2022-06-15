@@ -12,6 +12,6 @@ public class Guitar implements Instrument {
 
     @Override
     public void play() {
-        System.out.println("Play Guitar with " + this.numberOfStrings + " strings");
+        System.out.println("Play " + this.getClass().getSimpleName() + " with " + this.numberOfStrings + " strings");
     }
 }
