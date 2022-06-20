@@ -1,0 +1,5 @@
+package lesson4.task4hw;
+
+public enum Pet {
+    ZEBRA, RHINO, PENGUIN, PANDA, MONKEY, KANGAROO, GIRAFFE, ELEPHANT, ALLIGATOR, DOG, CAT, HORSE, COW
+}
