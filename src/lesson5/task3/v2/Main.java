@@ -1,15 +1,17 @@
-package lesson5.task3;
+package lesson5.task3.v2;
+
+import lesson5.task3.Car;
+import lesson5.task3.Driver;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
-
-        List<Car> cars = new ArrayList<Car>();
+        List<Car> cars = new ArrayList<>();
 
         cars.add(new Car("Tesla", 250, new Driver("Liam", 50, 10), Math.random() * 10000, Year.now().getValue()));
         cars.add(new Car("Mercedes-Benz", 210, new Driver("Harper", 25, 5), Math.random() * 1000, Year.now().getValue()));
@@ -19,24 +21,29 @@ public class Main {
         cars.add(new Car("Mazda", 100, new Driver("Benjamin", 30, 4), Math.random() * 1000, Year.now().getValue()));
         cars.add(new Car("Ferrari", 220, new Driver("Lucas", 27, 5), Math.random() * 1000, Year.now().getValue()));
 
-        List<Car> carsForUpdate = new ArrayList<Car>();
-        for (int i = 0; i < cars.size() / 2 + 1; i++) {
-            carsForUpdate.add(cars.get(i));
-        }
-        System.out.println("\033[0;105mPower+10%: \033[0;36m");
-        System.out.println(carsForUpdate);
-        carsForUpdate.stream().forEach(car -> car.setPower(car.getPower() * 1.1));
-        System.out.println(carsForUpdate);
+        System.out.println(cars);
+        cars.stream()
+                .skip(cars.size() / 2)
+                .peek(car -> car.setPower((int) Math.round(car.getPower() * 1.1)))
+                .collect(Collectors.toList());
 
-        System.out.println("\033[0;102m+1 to experience...: \033[0;34m");
-        List<Car> addExp = cars.stream().filter(car -> car.getOwner().getAge() > 25 && car.getOwner().getExp() < 5).collect(Collectors.toList());
-        System.out.println(addExp);
-        addExp.stream().forEach(car -> car.getOwner().setExp(car.getOwner().getExp() + 1));
-        System.out.println(addExp);
+        List<Driver> addExp = cars.stream()
+                .map(car -> car.getOwner())
+                .peek(driver -> {
+                    if (driver.getAge() > 25 && driver.getExp() < 5)
+                        driver.setExp(driver.getExp() + 1);
+                })
+                .collect(Collectors.toList());
 
-        AtomicReference<Double> priceOfAllCars = new AtomicReference<>((double) 0);
-        cars.stream().forEach(car -> priceOfAllCars.updateAndGet(v -> new Double((double) (v + car.getPrice()))));
-        System.out.println("\033[0;103m Price of all cars: \033[0;35m" + priceOfAllCars + "\033[0m");
+        Double priceOfAllCars = cars.stream()
+                .map(car -> car.getPrice())
+                .reduce((double) 0, ((accumulator, price) -> accumulator + price));
+
+        System.out.println(cars);
+
+//        System.out.println(addPower);
+        System.out.println(addExp);
+        System.out.println(priceOfAllCars);
     }
 }
 // Створити клас автомобіля з полями:
