@@ -40,7 +40,6 @@ public class Main {
 
         System.out.println(cars);
 
-//        System.out.println(addPower);
         System.out.println(addExp);
         System.out.println(priceOfAllCars);
     }
